@@ -1,4 +1,4 @@
-package gomdb
+package imdb
 
 import "testing"
 
