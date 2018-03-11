@@ -1,37 +1,32 @@
-The Golang Omdb API
-=======
+# About imdb
 
-Author: Christopher T. Herrera (eefretsoul AT gmail DOT com)
+`imdb` provides a simple wrapper around the [OMDb API][omdb-api].
 
-<iframe src="http://githubbadge.appspot.com/eefret" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder="0"></iframe>
+## Installing
 
-This API uses the [omdbapi.com](http://omdbapi.com/) API by Brian Fritz
+Install in the usual Go fashion:
 
-***
-### OMDBAPI.com
-This is an excellent open database for movie and film content.
+```sh
+$ go get -u github.com/kenshaw/imdb
+```
 
-I *strongly* encourage you to check it out and contribute to keep it growing.
+## Using
 
-### http://www.omdbapi.com
-***
-Project Usage
--------------
-The API usage is very simple. Just import the go-imdb package
+`imdb` can be used similarly to the following:
 
-	import (
-		imdb "github.com/eefret/go-imdb"
-	)
+```go
+import (
+    /* ... */
+    "github.com/kenshaw/imdb"
+)
 
-And use any of the methods 
+cl := imdb.New("my-api-key")
+res, err := cl.Search("Fight Club", "")
+if err != nil { /* ... */ }
+log.Printf(">>> results: %+v", res)
+```
 
-	res, err := imdb.SearchMovies("The fifth element", "")
-	res2, err := imdb.GetMovieByTitle("True Grit", "1969")
-	res3, err := imdb.GetMovieByImdbId("tt2015381")
+Please see the [GoDoc][godoc] listing for the full API.
 
-See the project documentation to see the Response Objects and stuff
-
-Project Documentation
----------------------
-The automatically generated documentation can be found in godocs.
-[![GoDoc](https://godoc.org/github.com/eefret/go-imdb?status.svg)](https://godoc.org/github.com/eefret/go-imdb)
+[omdb-api]: http://www.omdbapi.com/
+[godoc]: https://godoc.org/github.com/kenshaw/imdb
