@@ -37,6 +37,13 @@ type SearchResponse struct {
 	Error    string
 }
 
+// A Rating will hold the related information about rating from different
+// sources
+type Rating struct {
+	Source string
+	Value  string
+}
+
 // A MovieResult will hold the related information of a single movie.
 type MovieResult struct {
 	Title             string
@@ -58,16 +65,7 @@ type MovieResult struct {
 	ImdbVotes         string
 	ImdbID            string
 	Type              string
-	TomatoMeter       string
-	TomatoImage       string
-	TomatoRating      string
-	TomatoReviews     string
-	TomatoFresh       string
-	TomatoRotten      string
-	TomatoConsensus   string
-	TomatoUserMeter   string
-	TomatoUserRating  string
-	TomatoUserReviews string
+	Ratings           []Rating
 	DVD               string
 	BoxOffice         string
 	Production        string
