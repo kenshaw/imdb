@@ -1,13 +1,8 @@
 language: go
 env:
-  global:
     secure: dPSZnyAaO8lEJt601H0p6KY5bi0BPzZ75A1SXjKU3i+eSPpWmBscxyTpO/snVaFYCT98GZ6Iej9zCI9Ew+QIuY/55aY6C/ZfVomTxGDFHqjzGbiYyra1ayfHjW/fCL1QIo30igkX6nbEGXnUa3l1QjwJusP7ozoJhuuAJIWfmH2pX1p4dS0JvKV5TPiKv22OSJdw8e4XL53Q5muqlRAXItPR6p6fpWkaNDKdiRBwSE6uxQ51xPwCdq3BNKVcvvipJwRABz0BoYVtnRLzhVTNGNlnpqReVXUNEkujLb/XUFfiMG6kk9tsnmaT6bTODl/fNqTcIFodKAtK06DwwG2tLzMt9UVSwu5hkwhLLLM08S3wddLuhOGi+gxNr2l7s4dAnsJ5gc2o+B3ma0GFXoEK6sXAckEO1q+nxC3PhdySAZWlAcFXxgCCvU/zzwqURuNRqevgR3Y7HsQ4YcUJi2uSBuuaE0DGW53EEj1vZeKeXkcDKTmfmXR8fNesOoUZqRy28tTA0/8V3q6y7ZNFGudSzGG51/Ypuy10iKvYBctD7Xt4iT010h8hD2B19V6P22vgIdtEQIZrf5fZFpMAYOB9GaUQ+ie0PBXcH0N1Q6MIZIoqe4JjoggmxH446BVvidaFN5TOrjjOtTpUWa3s3REyfN+bFYIJ3PMTxWVLWY1ve3c=
 go:
-- 1.9.x
-- 1.10.x
+  - 1.12.
 - tip
-before_install:
-- go get github.com/mattn/goveralls
 script:
 - go test -v -coverprofile=coverage.out
-- goveralls -service=travis-ci -coverprofile=coverage.out
