@@ -201,7 +201,7 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 			subtype = SubtypeMovie
 			if m := subtypeRE.FindStringSubmatch(s.Text()); m != nil {
 				switch m[1] {
-				case "TV Series", "TV Short":
+				case "TV Mini Series", "TV Series", "TV Short":
 					subtype = SubtypeSeries
 				case "TV Episode":
 					subtype = SubtypeEpisode
@@ -296,7 +296,7 @@ func (r Result) Year() string {
 var yearRE = regexp.MustCompile(`\(([0-9]{4})\)`)
 
 // subtypeRE matches subtypes.
-var subtypeRE = regexp.MustCompile(`\((TV Series|TV Short|TV Episode|Video Game)\)`)
+var subtypeRE = regexp.MustCompile(`\((TV Mini Series|TV Series|TV Short|TV Episode|Video Game)\)`)
 
 // Option is a imdb client option.
 type Option func(*Client)
