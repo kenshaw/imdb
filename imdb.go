@@ -1,96 +1,46 @@
+// Package imdb is a simple imdb client.
 package imdb
 
 import (
-	"fmt"
-	"os"
+	"context"
 )
 
-const (
-	envKey = "OMDB_APIKEY"
-)
-
-func init() {
-	// setup default client
-	DefaultClient = New(os.Getenv(envKey))
+// FindCompany searches for a company.
+func FindCompany(company string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindCompany(context.Background(), company)
 }
 
-// DefaultClient is the default IMDB client.
-var DefaultClient *Client
-
-// A SearchResult represents a single API search result.
-type SearchResult struct {
-	Title  string
-	Year   string
-	ImdbID string
-	Type   string
+// FindKeyword searches for a keyword.
+func FindKeyword(keyword string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindKeyword(context.Background(), keyword)
 }
 
-// String satisfies the Stringer interface for SearchResult.
-func (sr SearchResult) String() string {
-	return fmt.Sprintf("#%s: %s (%s) Type: %s", sr.ImdbID, sr.Title, sr.Year, sr.Type)
+// FindName searches for a name.
+func FindName(name string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindName(context.Background(), name)
 }
 
-// A SearchResponse is the surrounding container holding multiple SearchResults.
-type SearchResponse struct {
-	Search   []SearchResult
-	Response string
-	Error    string
+// FindTitle searches for a title.
+func FindTitle(title string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindTitle(context.Background(), title)
 }
 
-// A Rating will hold the related information about rating from different
-// sources
-type Rating struct {
-	Source string
-	Value  string
+// FindGame searches for a game.
+func FindGame(game string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindGame(context.Background(), game)
 }
 
-// A MovieResult will hold the related information of a single movie.
-type MovieResult struct {
-	Title      string
-	Year       string
-	Rated      string
-	Released   string
-	Runtime    string
-	Genre      string
-	Director   string
-	Writer     string
-	Actors     string
-	Plot       string
-	Language   string
-	Country    string
-	Awards     string
-	Poster     string
-	Metascore  string
-	ImdbRating string
-	ImdbVotes  string
-	ImdbID     string
-	Type       string
-	Ratings    []Rating
-	DVD        string
-	BoxOffice  string
-	Production string
-	Website    string
-	Response   string
-	Error      string
+// FindMovie searches for a movie.
+func FindMovie(movie string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindMovie(context.Background(), movie)
 }
 
-// String satisifies the Stringer interface for MovieResult.
-func (mr MovieResult) String() string {
-	return fmt.Sprintf("#%s: %s (%s)", mr.ImdbID, mr.Title, mr.Year)
+// FindSeries searches for a series.
+func FindSeries(series string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindSeries(context.Background(), series)
 }
 
-// Search searches for movies given the title and optional year using DefaultClient.
-func Search(title, year string) (*SearchResponse, error) {
-	return DefaultClient.Search(title, year)
-}
-
-// MovieByTitle returns a MovieResult given the title and optional year using DefaultClient.
-func MovieByTitle(title, year string) (*MovieResult, error) {
-	return DefaultClient.MovieByTitle(title, year)
-}
-
-// MovieByImdbID performs an API search for a specified movie by the specific
-// id (ie, "tt2015381") using DefaultClient.
-func MovieByImdbID(id string) (*MovieResult, error) {
-	return DefaultClient.MovieByImdbID(id)
+// FindEpisode searches for a episode.
+func FindEpisode(episode string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindEpisode(context.Background(), episode)
 }
