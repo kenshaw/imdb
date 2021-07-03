@@ -279,7 +279,7 @@ func (r Result) String() string {
 	if s := r.Year(); s != "" {
 		year = fmt.Sprintf(" (%s)", s)
 	}
-	return fmt.Sprintf("%s: %q%s", r.ID, r.Title, year)
+	return fmt.Sprintf("%s: %q%s %s", r.ID, r.Title, year, r.URL)
 }
 
 // Year returns the year from the selection.
