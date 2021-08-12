@@ -223,44 +223,54 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 	return res, nil
 }
 
+// FindType searches for type and q.
+func (cl *Client) FindType(ctx context.Context, typ, q string, params ...string) ([]Result, error) {
+	return cl.Find(ctx, q, append(params, "s", typ)...)
+}
+
 // FindCompany searches for a company.
 func (cl *Client) FindCompany(ctx context.Context, company string, params ...string) ([]Result, error) {
-	return cl.Find(ctx, company, append(params, "s", TypeCompany)...)
+	return cl.FindType(ctx, TypeCompany, company, params...)
 }
 
 // FindKeyword searches for a keyword.
 func (cl *Client) FindKeyword(ctx context.Context, keyword string, params ...string) ([]Result, error) {
-	return cl.Find(ctx, keyword, append(params, "s", TypeKeyword)...)
+	return cl.FindType(ctx, TypeKeyword, keyword, params...)
 }
 
 // FindName searches for a name.
 func (cl *Client) FindName(ctx context.Context, name string, params ...string) ([]Result, error) {
-	return cl.Find(ctx, name, append(params, "s", TypeName)...)
+	return cl.FindType(ctx, TypeName, name, params...)
 }
 
 // FindTitle searches for a title.
 func (cl *Client) FindTitle(ctx context.Context, title string, params ...string) ([]Result, error) {
-	return cl.Find(ctx, title, append(params, "s", TypeTitle)...)
+	return cl.FindType(ctx, TypeTitle, title, params...)
+}
+
+// FindTitleSubtype searches for subtype with title.
+func (cl *Client) FindTitleSubtype(ctx context.Context, subtype, title string, params ...string) ([]Result, error) {
+	return cl.FindTitle(ctx, title, append(params, "ttype", subtype)...)
 }
 
 // FindGame searches for a game.
 func (cl *Client) FindGame(ctx context.Context, game string, params ...string) ([]Result, error) {
-	return cl.FindTitle(ctx, game, append(params, "ttype", SubtypeGame)...)
+	return cl.FindTitleSubtype(ctx, SubtypeGame, game, params...)
 }
 
 // FindMovie searches for a movie.
 func (cl *Client) FindMovie(ctx context.Context, movie string, params ...string) ([]Result, error) {
-	return cl.FindTitle(ctx, movie, append(params, "ttype", SubtypeMovie)...)
+	return cl.FindTitleSubtype(ctx, SubtypeMovie, movie, params...)
 }
 
 // FindSeries searches for a series.
 func (cl *Client) FindSeries(ctx context.Context, series string, params ...string) ([]Result, error) {
-	return cl.FindTitle(ctx, series, append(params, "ttype", SubtypeSeries)...)
+	return cl.FindTitleSubtype(ctx, SubtypeSeries, series, params...)
 }
 
 // FindEpisode searches for a episode.
 func (cl *Client) FindEpisode(ctx context.Context, episode string, params ...string) ([]Result, error) {
-	return cl.FindTitle(ctx, episode, append(params, "ttype", SubtypeEpisode)...)
+	return cl.FindTitleSubtype(ctx, SubtypeEpisode, episode, params...)
 }
 
 // Result is the result of a search.

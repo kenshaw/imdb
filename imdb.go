@@ -5,6 +5,16 @@ import (
 	"context"
 )
 
+// Find searches for q.
+func Find(q string, opts ...Option) ([]Result, error) {
+	return New(opts...).Find(context.Background(), q)
+}
+
+// FindType searches for type and q.
+func FindType(typ, q string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindType(context.Background(), typ, q)
+}
+
 // FindCompany searches for a company.
 func FindCompany(company string, opts ...Option) ([]Result, error) {
 	return New(opts...).FindCompany(context.Background(), company)
@@ -23,6 +33,11 @@ func FindName(name string, opts ...Option) ([]Result, error) {
 // FindTitle searches for a title.
 func FindTitle(title string, opts ...Option) ([]Result, error) {
 	return New(opts...).FindTitle(context.Background(), title)
+}
+
+// FindTitleSubtype searches for subtype with title.
+func FindTitleSubtype(subtype, title string, opts ...Option) ([]Result, error) {
+	return New(opts...).FindTitleSubtype(context.Background(), subtype, title)
 }
 
 // FindGame searches for a game.
