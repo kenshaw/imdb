@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"path"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -300,6 +301,12 @@ func (r Result) Year() string {
 		}
 	}
 	return ""
+}
+
+// YearInt returns the year as an int from the selection.
+func (r Result) YearInt() int {
+	year, _ := strconv.Atoi(r.Year())
+	return year
 }
 
 // yearRE matches a year.
