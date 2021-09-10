@@ -1,12 +1,13 @@
 package imdb
 
 import (
+	"context"
 	"testing"
 )
 
 func TestFindTitle(t *testing.T) {
 	t.Parallel()
-	res, err := FindTitle("bob burger", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
+	res, err := FindTitle(context.Background(), "bob burger", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
 	if err != nil {
 		t.Fatalf("expected no error, got: %v", err)
 	}
@@ -29,7 +30,7 @@ func TestFindTitle(t *testing.T) {
 
 func TestFindName(t *testing.T) {
 	t.Parallel()
-	res, err := FindName("brd pitt", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
+	res, err := FindName(context.Background(), "brd pitt", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
 	if err != nil {
 		t.Fatalf("expected no error, got: %v", err)
 	}
@@ -51,7 +52,7 @@ func TestFindName(t *testing.T) {
 }
 
 func TestFindGame(t *testing.T) {
-	res, err := FindGame("wrld warcraft", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
+	res, err := FindGame(context.Background(), "wrld warcraft", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
 	if err != nil {
 		t.Fatalf("expected no error, got: %v", err)
 	}
@@ -73,7 +74,7 @@ func TestFindGame(t *testing.T) {
 }
 
 func TestFindMovie(t *testing.T) {
-	res, err := FindMovie("fight club 1999", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
+	res, err := FindMovie(context.Background(), "fight club 1999", WithLogf(t.Logf), WithAppCacheDir("imdb-test"))
 	if err != nil {
 		t.Fatalf("expected no error, got: %v", err)
 	}
