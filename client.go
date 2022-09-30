@@ -16,7 +16,6 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/chromedp/omahaproxy"
 	"github.com/kenshaw/diskcache"
 	"github.com/kenshaw/httplog"
 )
@@ -54,6 +53,7 @@ type Client struct {
 func New(opts ...Option) *Client {
 	cl := &Client{
 		Transport: DefaultTransport,
+		UserAgent: "wget",
 	}
 	for _, o := range opts {
 		o(cl)
@@ -66,9 +66,6 @@ func (cl *Client) init(ctx context.Context) error {
 	var err error
 	cl.once.Do(func() {
 		if err = cl.buildClient(ctx); err != nil {
-			return
-		}
-		if err = cl.buildUserAgent(ctx); err != nil {
 			return
 		}
 	})
@@ -96,23 +93,6 @@ func (cl *Client) buildClient(ctx context.Context) error {
 		}
 	}
 	cl.cl = &http.Client{Transport: transport}
-	return nil
-}
-
-// buildUserAgent builds the user agent.
-func (cl *Client) buildUserAgent(ctx context.Context) error {
-	if cl.UserAgent != "" {
-		return nil
-	}
-	// retrieve latest chrome version
-	ver, err := omahaproxy.New(
-		omahaproxy.WithTransport(cl.cl.Transport),
-	).Latest(ctx, "linux", "stable")
-	if err != nil {
-		return err
-	}
-	// build user agent
-	cl.UserAgent = fmt.Sprintf("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s Safari/537.36", ver.Version)
 	return nil
 }
 
@@ -182,7 +162,7 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 		return nil, err
 	}
 	var res []Result
-	doc.Find(".findResult .result_text").Each(func(i int, s *goquery.Selection) {
+	doc.Find(".result_text").Each(func(i int, s *goquery.Selection) {
 		// get first a
 		a := s.Find("a").First()
 		href := a.AttrOr("href", "")

@@ -14,7 +14,8 @@ func ExampleNew_findTitle() {
 		panic(err)
 	}
 	if len(res) == 0 {
-		panic("expected at least one result")
+		fmt.Println("expected at least one result")
+		return
 	}
 	fmt.Printf("result: %s\n", res[0])
 	// Output:
