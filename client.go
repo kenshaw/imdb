@@ -162,7 +162,7 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 		return nil, err
 	}
 	var res []Result
-	doc.Find(".result_text").Each(func(i int, s *goquery.Selection) {
+	doc.Find(".find-result-item").Each(func(i int, s *goquery.Selection) {
 		// get first a
 		a := s.Find("a").First()
 		href := a.AttrOr("href", "")
@@ -180,25 +180,27 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 		if typ == "tt" {
 			// determine subtype
 			subtype = SubtypeMovie
-			if m := subtypeRE.FindStringSubmatch(s.Text()); m != nil {
-				switch m[1] {
-				case "TV Mini Series", "TV Series", "TV Short":
-					subtype = SubtypeSeries
-				case "TV Episode":
-					subtype = SubtypeEpisode
-				case "Video Game":
-					subtype = SubtypeGame
-				}
+			switch s.Find("li:nth-child(2)").Text() {
+			case "TV Mini Series", "TV Series", "TV Short":
+				subtype = SubtypeSeries
+			case "TV Episode":
+				subtype = SubtypeEpisode
+			case "Video Game":
+				subtype = SubtypeGame
 			}
 		}
 		u.RawQuery = ""
+		var year string
+		if typ != TypeName {
+			year = s.Find("li").First().Text()
+		}
 		res = append(res, Result{
 			URL:     u.String(),
 			ID:      id,
 			Title:   a.Text(),
 			Type:    typ,
 			Subtype: subtype,
-			S:       s,
+			Year:    year,
 		})
 	})
 	return res, nil
@@ -261,39 +263,28 @@ type Result struct {
 	Title   string
 	Type    string
 	Subtype string
-	S       *goquery.Selection
+	Year    string
 }
 
 // String satisfies the fmt.Stringer interface.
 func (r Result) String() string {
 	var year string
-	if s := r.Year(); s != "" {
+	if s := r.Year; s != "" {
 		year = fmt.Sprintf(" (%s)", s)
 	}
 	return fmt.Sprintf("%s: %q%s %s", r.ID, r.Title, year, r.URL)
 }
 
-// Year returns the year from the selection.
-func (r Result) Year() string {
-	if r.Type == TypeTitle {
-		if m := yearRE.FindStringSubmatch(r.S.Text()); m != nil {
-			return m[1]
-		}
-	}
-	return ""
-}
-
 // YearInt returns the year as an int from the selection.
 func (r Result) YearInt() int {
-	year, _ := strconv.Atoi(r.Year())
-	return year
+	year, _ := strconv.Atoi(cleanRE.ReplaceAllString(r.Year, ""))
+	if year > 1800 && year < 2100 {
+		return year
+	}
+	return 0
 }
 
-// yearRE matches a year.
-var yearRE = regexp.MustCompile(`\(([0-9]{4})\)`)
-
-// subtypeRE matches subtypes.
-var subtypeRE = regexp.MustCompile(`\((TV Mini Series|TV Series|TV Short|TV Episode|Video Game)\)`)
+var cleanRE = regexp.MustCompile(`[^0-9]`)
 
 // Option is a imdb client option.
 type Option func(*Client)
