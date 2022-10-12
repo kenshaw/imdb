@@ -11,7 +11,7 @@ func Find(ctx context.Context, q string, opts ...Option) ([]Result, error) {
 }
 
 // FindType searches for type and q.
-func FindType(ctx context.Context, typ, q string, opts ...Option) ([]Result, error) {
+func FindType(ctx context.Context, typ Type, q string, opts ...Option) ([]Result, error) {
 	return New(opts...).FindType(ctx, typ, q)
 }
 
@@ -36,7 +36,7 @@ func FindTitle(ctx context.Context, title string, opts ...Option) ([]Result, err
 }
 
 // FindTitleSubtype searches for subtype with title.
-func FindTitleSubtype(ctx context.Context, subtype, title string, opts ...Option) ([]Result, error) {
+func FindTitleSubtype(ctx context.Context, subtype Subtype, title string, opts ...Option) ([]Result, error) {
 	return New(opts...).FindTitleSubtype(ctx, subtype, title)
 }
 

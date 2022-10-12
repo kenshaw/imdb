@@ -20,7 +20,7 @@ func TestFindTitle(t *testing.T) {
 	if exp, got := 2011, res[0].YearInt(); got != exp {
 		t.Errorf("expected %d, got: %d", exp, got)
 	}
-	if exp, got := "tv", res[0].Subtype; got != exp {
+	if exp, got := "tv", string(res[0].Subtype); got != exp {
 		t.Errorf("expected %q, got: %q", exp, got)
 	}
 	if exp, got := "tt1561755", res[0].ID; got != exp {
@@ -43,7 +43,7 @@ func TestFindName(t *testing.T) {
 	if exp, got := "", res[0].Year; got != exp {
 		t.Errorf("expected %q, got: %q", exp, got)
 	}
-	if exp, got := "nm", res[0].Subtype; got != exp {
+	if exp, got := "nm", string(res[0].Subtype); got != exp {
 		t.Errorf("expected %q, got: %q", exp, got)
 	}
 	if exp, got := "nm0000093", res[0].ID; got != exp {
@@ -65,7 +65,7 @@ func TestFindGame(t *testing.T) {
 	if exp, got := "2004", res[0].Year; got != exp {
 		t.Errorf("expected %q, got: %q", exp, got)
 	}
-	if exp, got := "vg", res[0].Subtype; got != exp {
+	if exp, got := "vg", string(res[0].Subtype); got != exp {
 		t.Errorf("expected %q, got: %q", exp, got)
 	}
 	if exp, got := "tt0433664", res[0].ID; got != exp {
@@ -87,7 +87,7 @@ func TestFindMovie(t *testing.T) {
 	if exp, got := "1999", res[0].Year; got != exp {
 		t.Errorf("expected %q, got: %q", exp, got)
 	}
-	if exp, got := "ft", res[0].Subtype; got != exp {
+	if exp, got := "ft", string(res[0].Subtype); got != exp {
 		t.Errorf("expected %q, got: %q", exp, got)
 	}
 	if exp, got := "tt0137523", res[0].ID; got != exp {

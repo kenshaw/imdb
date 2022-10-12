@@ -19,5 +19,5 @@ func ExampleNew_findTitle() {
 	}
 	fmt.Printf("result: %s\n", res[0])
 	// Output:
-	// result: tt12801262: "Luca" (2021) https://www.imdb.com/title/tt12801262/
+	// result: tt12801262: "Luca" (movie, 2021) https://www.imdb.com/title/tt12801262/
 }

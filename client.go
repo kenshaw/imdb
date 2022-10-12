@@ -23,22 +23,60 @@ import (
 // DefaultTransport is the default http transport.
 var DefaultTransport = http.DefaultTransport
 
+// Type is a type.
+type Type string
+
 // Type values.
 const (
-	TypeAll     = "al"
-	TypeCompany = "co"
-	TypeKeyword = "kw"
-	TypeName    = "nm"
-	TypeTitle   = "tt"
+	TypeAll     Type = "al"
+	TypeCompany Type = "co"
+	TypeKeyword Type = "kw"
+	TypeName    Type = "nm"
+	TypeTitle   Type = "tt"
 )
+
+// String satisfies the fmt.Stringer interface.
+func (typ Type) String() string {
+	switch typ {
+	case TypeAll:
+		return "all"
+	case TypeCompany:
+		return "company"
+	case TypeKeyword:
+		return "keyword"
+	case TypeName:
+		return "name"
+	case TypeTitle:
+		return "title"
+	}
+	return "Type(" + string(typ) + ")"
+}
+
+// Subtype is a subtype.
+type Subtype string
 
 // Subtype values.
 const (
-	SubtypeGame    = "vg"
-	SubtypeMovie   = "ft"
-	SubtypeSeries  = "tv"
-	SubtypeEpisode = "ep"
+	SubtypeGame    Subtype = "vg"
+	SubtypeMovie   Subtype = "ft"
+	SubtypeSeries  Subtype = "tv"
+	SubtypeEpisode Subtype = "ep"
 )
+
+// String satisfies the fmt.Stringer interface.
+func (subtype Subtype) String() string {
+	switch subtype {
+	case SubtypeGame:
+		return "game"
+	case SubtypeMovie:
+		return "movie"
+	case SubtypeSeries:
+		return "series"
+	case SubtypeEpisode:
+		return "episode"
+	}
+	return "Subtype(" + string(subtype) + ")"
+}
 
 // Client is a imdb client.
 type Client struct {
@@ -176,8 +214,8 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 		}
 		// id
 		id := path.Base(u.Path)
-		typ, subtype := id[:2], id[:2]
-		if typ == "tt" {
+		typ, subtype := Type(id[:2]), Subtype(id[:2])
+		if typ == TypeTitle {
 			// determine subtype
 			subtype = SubtypeMovie
 			switch s.Find("li:nth-child(2)").Text() {
@@ -191,7 +229,7 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 		}
 		u.RawQuery = ""
 		var year string
-		if typ != TypeName {
+		if typ == TypeTitle {
 			year = s.Find("li").First().Text()
 		}
 		res = append(res, Result{
@@ -207,8 +245,8 @@ func (cl *Client) Find(ctx context.Context, q string, params ...string) ([]Resul
 }
 
 // FindType searches for type and q.
-func (cl *Client) FindType(ctx context.Context, typ, q string, params ...string) ([]Result, error) {
-	return cl.Find(ctx, q, append(params, "s", typ)...)
+func (cl *Client) FindType(ctx context.Context, typ Type, q string, params ...string) ([]Result, error) {
+	return cl.Find(ctx, q, append(params, "s", string(typ))...)
 }
 
 // FindCompany searches for a company.
@@ -232,8 +270,8 @@ func (cl *Client) FindTitle(ctx context.Context, title string, params ...string)
 }
 
 // FindTitleSubtype searches for subtype with title.
-func (cl *Client) FindTitleSubtype(ctx context.Context, subtype, title string, params ...string) ([]Result, error) {
-	return cl.FindTitle(ctx, title, append(params, "ttype", subtype)...)
+func (cl *Client) FindTitleSubtype(ctx context.Context, subtype Subtype, title string, params ...string) ([]Result, error) {
+	return cl.FindTitle(ctx, title, append(params, "ttype", string(subtype))...)
 }
 
 // FindGame searches for a game.
@@ -261,18 +299,18 @@ type Result struct {
 	URL     string
 	ID      string
 	Title   string
-	Type    string
-	Subtype string
+	Type    Type
+	Subtype Subtype
 	Year    string
 }
 
 // String satisfies the fmt.Stringer interface.
 func (r Result) String() string {
 	var year string
-	if s := r.Year; s != "" {
-		year = fmt.Sprintf(" (%s)", s)
+	if r.Year != "" {
+		year = ", " + r.Year
 	}
-	return fmt.Sprintf("%s: %q%s %s", r.ID, r.Title, year, r.URL)
+	return fmt.Sprintf("%s: %q (%s%s) %s", r.ID, r.Title, r.Subtype, year, r.URL)
 }
 
 // YearInt returns the year as an int from the selection.
